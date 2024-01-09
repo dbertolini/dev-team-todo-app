@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "texto": "leche",
+    "fechaCreacion": "2019-10-10T00:00:00.000Z",
+    "fechaCompletado": "2019-10-11T00:00:00.000Z",
+    "completado": true
+  },
+  {
+    "id": 2,
+    "texto": "frutas",
+    "fechaCreacion": "2019-10-11T00:00:00.000Z",
+    "fechaCompletado": "2019-10-12T00:00:00.000Z",
+    "completado": true
+  },
+  {
+    "id": 3,
+    "texto": "carne",
+    "fechaCreacion": "2019-10-12T00:00:00.000Z",
+    "fechaCompletado": "2019-10-13T00:00:00.000Z",
+    "completado": true
+  },
+  {
+    "id": 4,
+    "texto": "pollo",
+    "fechaCreacion": "2019-10-13T00:00:00.000Z",
+    "fechaCompletado": "2019-10-14T00:00:00.000Z",
+    "completado": false
+  }
+]

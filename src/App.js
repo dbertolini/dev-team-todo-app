@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import datosEnJson from "./datos.json";
 
 function App() {
+  function agregarItem() {
+    console.log("Agregando item");
+  }
+
+  function cambiarEstadoItem(estado, id) {}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="text" placeholder="Nuevo To Do" />
+      <button onClick={agregarItem}>Agregar</button>
+      <hr></hr>
+
+      {datosEnJson.map((item) => {
+        return (
+          <div>
+            <br />
+            <input
+              type="checkbox"
+              onClick={cambiarEstadoItem(item.completado, item.id)}
+              checked={item.completado}
+            />
+            <span style={{ margin: 4 }}>{item.texto}</span>
+            <span style={{ margin: 4 }}>{item.fechaCreacion}</span>
+            <span style={{ margin: 4 }}>{item.fechaCompletado}o</span>
+          </div>
+        );
+      })}
     </div>
   );
 }
