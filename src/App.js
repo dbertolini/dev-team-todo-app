@@ -1,3 +1,10 @@
+// Requerimientos
+// 1) Acer una app web que contemple la creacion de items To Do ------
+// 2) Pantalla principal con lista de items pre-cargada (aca va a haber un .json con algunos datos)
+// 3) Los datos del objeto ITEM -> id, texto, fechaCreacion, fechaCompletado
+// 4) Tambien va a haber un input de tipo texto, seguido de un boton para el agregado del item To Do y su aceptacion
+// 5) Cada item tendrá un checkbox a su lado, para indicar si fue completado o no
+
 import "./App.css";
 
 import datosEnJson from "./datos.json";
