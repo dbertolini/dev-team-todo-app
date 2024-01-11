@@ -10,6 +10,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 import BodyComponent from "./components/BodyComponent";
+import ContainerComponent from "./components/ContainerComponent";
+import FooterComponent from "./components/FooterComponent";
 import HeaderComponent from "./components/HeaderComponent";
 import NavComponent from "./components/NavComponent";
 import datosEnJson from "./datos.json";
@@ -76,7 +78,7 @@ function App() {
   }, [datos]);
 
   return (
-    <div className="App">
+    <ContainerComponent>
       <NavComponent
         agregarItem={agregarItem}
         handlerTextoNuevoItem={handlerTextoNuevoItem}
@@ -93,7 +95,19 @@ function App() {
           handlerBorrarItem={handlerBorrarItem}
         />
       </table>
-    </div>
+      <FooterComponent propEjemplo={"Hola mundo"}>
+        <span>Copyrights (DevTeam)</span>
+        <span>-</span>
+        <span>2024</span>
+        <span>-</span>
+        <a
+          href="https://github.com/dbertolini/dev-team-todo-app"
+          target="_blank"
+        >
+          Github Repository
+        </a>
+      </FooterComponent>
+    </ContainerComponent>
   );
 }
 
