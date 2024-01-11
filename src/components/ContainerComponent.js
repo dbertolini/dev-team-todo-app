@@ -1,5 +1,10 @@
 function ContainerComponent({ children }) {
-  return <div style={{ backgroundColor: "red" }}>{children}</div>;
+  return (
+    <>
+      <h1>Bienvenidos</h1>
+      <div style={{ backgroundColor: "red" }}>{children}</div>
+    </>
+  );
 }
 
 export default ContainerComponent;

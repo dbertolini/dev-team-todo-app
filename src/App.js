@@ -95,7 +95,7 @@ function App() {
           handlerBorrarItem={handlerBorrarItem}
         />
       </table>
-      <FooterComponent propEjemplo={"Hola mundo"}>
+      {/* <FooterComponent propEjemplo={"Hola mundo"}>
         <span>Copyrights (DevTeam)</span>
         <span>-</span>
         <span>2024</span>
@@ -106,7 +106,7 @@ function App() {
         >
           Github Repository
         </a>
-      </FooterComponent>
+      </FooterComponent> */}
     </ContainerComponent>
   );
 }
