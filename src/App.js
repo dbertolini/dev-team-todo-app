@@ -7,8 +7,12 @@
 
 import "./App.css";
 
+import { useEffect, useState } from "react";
+
+import BodyComponent from "./components/BodyComponent";
+import HeaderComponent from "./components/HeaderComponent";
+import NavComponent from "./components/NavComponent";
 import datosEnJson from "./datos.json";
-import { useState } from "react";
 
 function App() {
   const [datos, setDatos] = useState(datosEnJson);
@@ -61,75 +65,33 @@ function App() {
   }
 
   function handlerBorrarItem(item) {
+    console.log("Llamandose desde el método");
     let auxTemp = datos.filter((i) => i.id !== item.id);
     setDatos(auxTemp);
   }
+
+  useEffect(() => {
+    // Generalmente se utiliza para popular datos desde un BE
+    console.log("Llamandose desde el useEffect");
+  }, [datos]);
+
   return (
     <div className="App">
-      <input
-        type="text"
-        placeholder="Nuevo To Do"
-        value={textoNuevoItem}
-        onChange={(val) => handlerTextoNuevoItem(val)}
+      <NavComponent
+        agregarItem={agregarItem}
+        handlerTextoNuevoItem={handlerTextoNuevoItem}
+        textoNuevoItem={textoNuevoItem}
       />
-      <button onClick={() => agregarItem()}>Agregar</button>
       <hr></hr>
       <table
         style={{ border: 2, borderStyle: "solid", borderCollapse: "collapse" }}
       >
-        <tr>
-          <td style={{ border: "1px solid black" }}>
-            <span>Estado</span>
-          </td>
-          <td style={{ border: "1px solid black" }}>
-            <span>Texto</span>
-          </td>
-          <td style={{ border: "1px solid black" }}>
-            <span>F. Creacion</span>
-          </td>
-          <td style={{ border: "1px solid black" }}>
-            <span>F. Completado</span>
-          </td>
-          <td style={{ border: "1px solid black" }}>
-            <span>Acciones</span>
-          </td>
-        </tr>
-
-        {datos &&
-          datos
-            .sort((a, b) => a.id - b.id)
-            .map((item) => {
-              return (
-                <tr>
-                  <td style={{ border: "1px solid black" }}>
-                    <input
-                      type="checkbox"
-                      onClick={() => cambiarEstadoItem(item)}
-                      checked={item.completado}
-                    />
-                  </td>
-                  <td style={{ border: "1px solid black" }}>
-                    <span>{item.texto}</span>
-                  </td>
-                  <td style={{ border: "1px solid black" }}>
-                    <span>{item.fechaCreacion}</span>
-                  </td>
-                  <td style={{ border: "1px solid black" }}>
-                    <span>{item.fechaCompletado}</span>
-                  </td>
-                  <td style={{ border: "1px solid black" }}>
-                    <button onClick={() => handlerBorrarItem(item)}>
-                      Borrar
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        {datos.length === 0 && (
-          <tr>
-            <td colSpan="5">No hay datos</td>
-          </tr>
-        )}
+        <HeaderComponent />
+        <BodyComponent
+          datos={datos}
+          cambiarEstadoItem={cambiarEstadoItem}
+          handlerBorrarItem={handlerBorrarItem}
+        />
       </table>
     </div>
   );
