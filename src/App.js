@@ -7,19 +7,53 @@
 
 import "./App.css";
 
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import BodyComponent from "./components/BodyComponent";
 import ContainerComponent from "./components/ContainerComponent";
-import FooterComponent from "./components/FooterComponent";
+//import FooterComponent from "./components/FooterComponent";
 import HeaderComponent from "./components/HeaderComponent";
 import NavComponent from "./components/NavComponent";
-import datosEnJson from "./datos.json";
+//import datosEnJson from "./datos.json";
+import { initializeApp } from "firebase/app";
+import { v4 as uuidv4 } from "uuid";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCDI6-Aa7CChPuVFy23w10NTF14tLRU0kQ",
+  authDomain: "dev-team-todo-sample.firebaseapp.com",
+  projectId: "dev-team-todo-sample",
+  storageBucket: "dev-team-todo-sample.appspot.com",
+  messagingSenderId: "371829285370",
+  appId: "1:371829285370:web:f4d4975e2c0e2ad2f68443",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 function App() {
-  const [datos, setDatos] = useState(datosEnJson);
+  const [datos, setDatos] = useState([]);
   const [textoNuevoItem, setTextoNuevoItem] = useState("");
-  const [ultimoId, setUltimoId] = useState(4);
+  // const [ultimoId, setUltimoId] = useState(4);
+
+  async function getTodos(db) {
+    const todosCol = collection(db, "todos");
+    const todosSnapshot = await getDocs(todosCol);
+    const todosList = todosSnapshot.docs.map((doc) => doc.data());
+    return todosList;
+  }
 
   function agregarItem() {
     // Checkear que el input tenga texto
@@ -28,38 +62,70 @@ function App() {
       return; // corta la funcion agregarItem
     }
 
-    // Creo una variable temporarioa auxTemp cuyo contenido es una copia del array datos
-    let auxTemp = [...datos];
-    // Push lo que hace es agregar un nuevo item a mi array de objetos
-    auxTemp.push({
-      id: ultimoId + 1,
+    // // Creo una variable temporarioa auxTemp cuyo contenido es una copia del array datos
+    // let auxTemp = [...datos];
+    // // Push lo que hace es agregar un nuevo item a mi array de objetos
+    // auxTemp.push({
+    //   id: ultimoId + 1,
+    //   texto: textoNuevoItem,
+    //   fechaCreacion: new Date().toLocaleDateString(),
+    //   fechaCompletado: "",
+    //   completado: false,
+    // });
+    // Guardo el valor de la variable temporaria auxTemp en el state datos
+    // setDatos(auxTemp);
+    // Guardarlo en Firestore
+    const uuid = uuidv4();
+    // addDoc(collection(db, "todos"), {
+    //   // id: ultimoId + 1,
+    //   id: uuid,
+    //   texto: textoNuevoItem,
+    //   fechaCreacion: new Date(),
+    //   fechaCompletado: null,
+    //   completado: false,
+    // });
+    setDoc(doc(db, "todos", uuid), {
+      // id: ultimoId + 1,
+      id: uuid,
       texto: textoNuevoItem,
-      fechaCreacion: new Date().toLocaleDateString(),
-      fechaCompletado: "",
+      fechaCreacion: new Date(),
+      fechaCompletado: null,
       completado: false,
     });
-    // Guardo el valor de la variable temporaria auxTemp en el state datos
-    setDatos(auxTemp);
-    // Autoincremento el ultimo id y lo almaceno en el state ultimoId
-    setUltimoId(ultimoId + 1);
+
+    // // Autoincremento el ultimo id y lo almaceno en el state ultimoId
+    // setUltimoId(ultimoId + 1);
     // Limpio el input de texto
     setTextoNuevoItem("");
   }
 
   function cambiarEstadoItem(item) {
-    // Creo una variable aux temporaria con los datos, menos el que estoy editando
-    let auxTemp = datos.filter((i) => i.id !== item.id);
-    // Agregar esa coleccion del item, con la modificacion requerida
-    auxTemp.push({
-      id: item.id,
-      texto: item.texto,
-      fechaCreacion: item.fechaCreacion,
-      fechaCompletado:
-        item.completado === true ? "" : new Date().toLocaleDateString(),
+    // // Creo una variable aux temporaria con los datos, menos el que estoy editando
+    // let auxTemp = datos.filter((i) => i.id !== item.id);
+    // // Agregar esa coleccion del item, con la modificacion requerida
+    // auxTemp.push({
+    //   id: item.id,
+    //   texto: item.texto,
+    //   fechaCreacion: item.fechaCreacion,
+    //   fechaCompletado:
+    //     item.completado === true ? "" : new Date().toLocaleDateString(),
+    //   completado: item.completado === true ? false : true,
+    // });
+    // // Guardar la informacion modificada en mi state datos
+    // setDatos(auxTemp);
+
+    // setDoc(doc(db, "todos", item.id), {
+    //   id: item.id,
+    //   texto: item.texto,
+    //   fechaCreacion: item.fechaCreacion,
+    //   fechaCompletado: item.completado === true ? "" : new Date(),
+    //   completado: item.completado === true ? false : true,
+    // });
+
+    updateDoc(doc(db, "todos", item.id), {
+      fechaCompletado: item.completado === true ? null : new Date(),
       completado: item.completado === true ? false : true,
     });
-    // Guardar la informacion modificada en mi state datos
-    setDatos(auxTemp);
   }
 
   function handlerTextoNuevoItem(val) {
@@ -67,15 +133,29 @@ function App() {
   }
 
   function handlerBorrarItem(item) {
-    console.log("Llamandose desde el método");
-    let auxTemp = datos.filter((i) => i.id !== item.id);
-    setDatos(auxTemp);
+    // let auxTemp = datos.filter((i) => i.id !== item.id);
+    // setDatos(auxTemp);
+    deleteDoc(doc(db, "todos", item.id));
+  }
+
+  async function getTodosFromFirebase() {
+    const todos = await getTodos(db);
+    console.log(todos);
   }
 
   useEffect(() => {
-    // Generalmente se utiliza para popular datos desde un BE
-    console.log("Llamandose desde el useEffect");
-  }, [datos]);
+    const unsubscribe = onSnapshot(query(collection(db, "todos")), (data) => {
+      let auxTempDatos = [];
+      for (let i = 0; i < data.docs.length; i++) {
+        // console.log(data.docs[i].data());
+        auxTempDatos.push(data.docs[i].data());
+      }
+      //console.log(auxTempDatos);
+      setDatos(auxTempDatos);
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <ContainerComponent>

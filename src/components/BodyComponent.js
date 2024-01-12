@@ -18,10 +18,10 @@ function BodyComponent({ datos, cambiarEstadoItem, handlerBorrarItem }) {
                   <span>{item.texto}</span>
                 </td>
                 <td style={{ border: "1px solid black" }}>
-                  <span>{item.fechaCreacion}</span>
+                  <span>{item.fechaCreacion.toDate().toDateString()}</span>
                 </td>
                 <td style={{ border: "1px solid black" }}>
-                  <span>{item.fechaCompletado}</span>
+                  <span>{item.fechaCompletado?.toDate().toDateString()}</span>
                 </td>
                 <td style={{ border: "1px solid black" }}>
                   <button onClick={() => handlerBorrarItem(item)}>
